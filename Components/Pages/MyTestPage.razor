@@ -1,0 +1,39 @@
+﻿@page "/mytestpage"
+@implements IDisposable
+@rendermode InteractiveServer
+
+<PageTitle>MyTestPage</PageTitle>
+
+<h3>MyTestPage</h3>
+
+<b>Current time is</b> @currentTime
+
+<div class="buttons">
+    <button type="button" @onclick="StartTimer">Старт</button>
+    <button type="button" @onclick="StopTimer">Стоп</button>
+</div>
+
+@code {
+    private string currentTime = DateTime.Now.ToString("HH:mm:ss");
+    private Timer? timer;
+
+    private async Task StartTimer()
+    {
+        timer = new Timer(_ =>
+        {
+            currentTime = DateTime.Now.ToString("HH:mm:ss");
+            InvokeAsync(StateHasChanged);
+        }, null, 0, 1000);
+    }
+
+    private async Task StopTimer()
+    {
+        timer?.Dispose();
+        timer = null;
+    }
+
+    public void Dispose()
+    {
+        timer?.Dispose();
+    }
+}
